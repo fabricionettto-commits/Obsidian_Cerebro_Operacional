@@ -12,6 +12,7 @@
 *.parquet
 *.html
 *.htm
+!docs/architecture_concept.png
 clean_output/
 reports/
 __pycache__/

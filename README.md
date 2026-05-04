@@ -2,6 +2,8 @@
 
 > Um cerebro forte conecta toda a operacao.
 
+![Cerebro operacional logistico](docs/architecture_concept.png)
+
 ## Visao Geral
 
 Este projeto apresenta uma arquitetura de dados e inteligencia operacional voltada para ambientes logisticos complexos.
@@ -141,32 +143,6 @@ Esse padrao evita perder campos importantes quando a fonte muda de formato.
 | `42U*`, `45U*` | open top 40 ft |
 | `45G*`, `45B*`, `45V*`, `4500`, `4510` | `HC40` |
 
-## Seguranca e Dados
+## Responsabilidade com Dados
 
-Este repositorio nao deve conter:
-
-- nomes reais de empresas
-- nomes reais de navios
-- nomes reais de clientes
-- rotas internas
-- sites, links ou URLs privadas
-- chaves de API
-- URLs de banco de dados
-- caminhos absolutos de maquinas privadas
-- planilhas originais
-- CSVs gerados com dados reais
-- dashboards HTML com dados reais
-
-## Publicacao
-
-Antes de publicar:
-
-- manter apenas arquivos sanitizados
-- revisar Markdown, SQL e exemplos
-- rodar uma busca por termos sensiveis
-- confirmar que `.gitignore` esta ativo
-- publicar em repositorio separado do ambiente operacional privado
-
-## Licenca
-
-Defina uma licenca apenas se o projeto for realmente aberto. Para portfolio privado, mantenha sem licenca publica.
+A seguranca dos dados e uma responsabilidade compartilhada. Em qualquer arquitetura operacional, todos temos o dever de proteger informacoes sensiveis, preservar a confidencialidade das fontes e usar dados apenas de forma adequada, consciente e controlada.
