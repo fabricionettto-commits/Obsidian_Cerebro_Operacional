@@ -1,0 +1,17 @@
+{
+  "source_file": "final_operation_sample.xlsx",
+  "source_sheet": "Load_Baplie_Out_Plus",
+  "operation": "load",
+  "dataset": "baplie_out_plus",
+  "operation_table": "Vessel_A_Operation",
+  "payload": {
+    "container_id": "XXXX0000000",
+    "type": "45R1",
+    "normalized_type": "RH40",
+    "port_of_origin": "PORT_A",
+    "final_destination": "PORT_B",
+    "customer": "Customer_001",
+    "weight_kg": 25000
+  }
+}
+
