@@ -1,148 +1,123 @@
-# Obsidian_Cerebro_Operacional
+# Operational Intelligence Architecture
 
-> Um cerebro forte conecta toda a operacao.
+Public architecture for connecting operational files, business rules, dashboards, and decision records in complex logistics environments.
 
-![Cerebro operacional logistico](docs/architecture_concept.png)
+This repository is not an abstract knowledge-base idea. It documents the architecture behind an operational workflow where vessel planning data, booking references, gate-in status, capacity rules, and execution notes need to be connected before decisions are made.
 
-## Visao Geral
+![Operational intelligence architecture](docs/architecture_concept.png)
 
-Este projeto apresenta uma arquitetura de dados e inteligencia operacional voltada para ambientes logisticos complexos.
+## Problem It Solves
 
-A proposta e transformar dados operacionais dispersos em decisoes centralizadas, inteligentes e acionaveis.
+In container shipping operations, decision data often lives across spreadsheets, reports, messages, local folders, and individual experience.
 
-Sem expor dados sensiveis, esta estrutura demonstra como integrar multiplas fontes operacionais em um unico cerebro analitico.
+That creates practical problems:
 
-## Conceito
+- the same vessel can have multiple competing views;
+- capacity risk is found late;
+- planning rules stay in people's heads;
+- execution changes are hard to audit;
+- teams lose time rebuilding context before acting.
 
-A operacao logistica moderna nao e linear. Ela envolve multiplos pontos:
+This architecture turns that scattered context into an operational intelligence layer.
 
-- Transporte maritimo
-- Transporte rodoviario
-- Transporte ferroviario
-- Terminais portuarios
-- Fluxos de carga e armazenagem
+## Where It Was Used
 
-Sem uma central de inteligencia, esses elementos operam de forma desconectada.
+The architecture supports maritime capacity planning and shortfall analysis workflows:
 
-Este projeto propoe um cerebro operacional centralizado que conecta, analisa e direciona toda a cadeia.
+- booking control;
+- BAPLIE-style operational files;
+- capacity planning by port, TEU, weight, and equipment;
+- gate-in visibility;
+- final moves;
+- decision notes in Markdown;
+- dashboards and HTML reports for review.
 
-## Arquitetura Conceitual
+## Decision Flow
 
 ```mermaid
 flowchart TD
-    A[Fontes operacionais] --> B[Ingestao de dados]
-    B --> C[Normalizacao e validacao]
-    C --> D[Modelo relacional]
-    C --> E[Payload operacional em JSON]
-    D --> F[Dashboards e relatorios]
+    A[Operational files] --> B[Ingestion]
+    B --> C[Normalization and validation]
+    C --> D[Analytical tables]
+    C --> E[Operational JSON payloads]
+    D --> F[Dashboards and reports]
     E --> F
-    F --> G[Decisoes operacionais]
-    G --> H[Base de conhecimento]
+    F --> G[Capacity and shortfall decisions]
+    G --> H[Decision notes and operating rules]
     H --> B
 ```
 
-## Arquitetura de Dados
+## What Changed Operationally
 
-A arquitetura segue um modelo escalavel e desacoplado.
+- Manual review became a repeatable workflow.
+- Capacity and shortfall questions were answered before execution.
+- Planning, commercial, and execution teams could use the same decision numbers.
+- Rules became versionable instead of living only in memory.
+- Operational exceptions became easier to explain and prioritize.
 
-### Camadas
+## Components
 
-1. **Ingestao de Dados**
-   - Dados operacionais
-   - Reservas, cargas, eventos e programacoes
-   - Inputs de multiplos sistemas
+| Component | Purpose |
+| --- | --- |
+| `schema.sql` | Public, generic data model for analytical and operational tables. |
+| `docs/sanitized-architecture-notes.md` | Public notes on sanitization and architecture boundaries. |
+| `examples/sample_payload_schema.json` | Anonymized example of flexible operational payload storage. |
+| `.gitignore` | Blocks spreadsheets, CSVs, generated HTML, credentials, and local caches. |
 
-2. **Processamento**
-   - Normalizacao
-   - Validacao
-   - Enriquecimento
-   - Classificacao operacional
+## Data Model
 
-3. **Armazenamento**
-   - Banco relacional estruturado
-   - Tabelas analiticas
-   - Payloads flexiveis em JSON para arquivos com layouts variaveis
+The architecture uses two complementary patterns.
 
-4. **Consumo**
-   - Dashboards
-   - Relatorios operacionais
-   - Analises de capacidade
-   - Registro de decisoes em Markdown
+### Analytical Tables
 
-## Componentes do Projeto
+Best for recurring fields:
 
-| Componente | Finalidade |
-|---|---|
-| `schema.sql` | Modelo publico e generico das tabelas analiticas e operacionais. |
-| `docs/sanitized-architecture-notes.md` | Regras de sanitizacao e arquitetura publica. |
-| `examples/sample_payload_schema.json` | Exemplo anonimizado de payload operacional. |
-| `.gitignore` | Bloqueia planilhas, CSVs, HTMLs gerados, credenciais e caches locais. |
+- operational reference;
+- origin and destination;
+- equipment type;
+- units and TEUs;
+- service window;
+- source file;
+- load timestamp.
 
-## Modelo de Dados
+### Operational Payloads
 
-O projeto usa dois padroes complementares.
+Best for final files or sources with variable layouts.
 
-### Tabelas Analiticas
+Each row preserves:
 
-Indicadas para dados recorrentes com campos estaveis:
+- sanitized source file;
+- source sheet;
+- operation type;
+- source category;
+- generic operational identifier;
+- full JSON payload;
+- load timestamp.
 
-- referencia operacional
-- origem e destino
-- tipo de equipamento
-- unidades e TEUs
-- janela de servico
-- arquivo de origem
-- timestamp de carga
+This preserves important fields when the source format changes.
 
-### Payload Operacional
+## Implemented Rules
 
-Indicado para arquivos finais ou fontes com multiplas abas e layouts variaveis.
+- Standardization of inconsistent operational fields.
+- Separation between planned commercial demand and confirmed operational data.
+- Classification of equipment by ISO code before auxiliary descriptions.
+- Use of JSON payloads for variable source structures.
+- Documentation of decisions and routines in a versionable knowledge base.
 
-Cada linha preserva:
+## Equipment Classification Example
 
-- arquivo de origem sanitizado
-- aba de origem
-- tipo de operacao
-- categoria da fonte
-- identificador operacional generico
-- payload completo em JSON
-- timestamp de carga
-
-Esse padrao evita perder campos importantes quando a fonte muda de formato.
-
-## Fluxo Operacional
-
-1. Receber arquivos operacionais em pasta local privada.
-2. Normalizar dados em uma camada de processamento.
-3. Validar campos, datas, quantidades e tipos.
-4. Carregar tabelas analiticas ou payloads operacionais.
-5. Gerar dashboards e relatorios.
-6. Registrar decisoes, regras e rotinas no cerebro em Markdown.
-7. Reprocessar quando fontes, regras ou programacoes mudarem.
-
-## Regras Implementadas
-
-- Padronizacao de campos operacionais inconsistentes.
-- Consolidacao de cargas por janela operacional.
-- Separacao entre dado comercial planejado e dado operacional confirmado.
-- Classificacao de equipamentos por codigo ISO antes de textos auxiliares.
-- Uso de payload JSON para preservar fontes com estrutura variavel.
-- Documentacao das decisoes em uma base de conhecimento versionavel.
-
-## Classificacao de Equipamentos
-
-| Padrao ISO | Tipo Normalizado |
-|---|---|
+| ISO Pattern | Normalized Type |
+| --- | --- |
 | `20G*`, `22G*`, `2200`, `2210` | `DC20` |
 | `22R*` | `RH20` |
-| `22P*` | plataforma ou flat rack 20 ft |
-| `22U*` | open top 20 ft |
+| `22P*` | 20 ft platform or flat rack |
+| `22U*` | 20 ft open top |
 | `42G*` | `DC40` |
 | `42R*`, `45R*` | `RH40` |
-| `42P*`, `45P*` | flat rack 40 ft |
-| `42U*`, `45U*` | open top 40 ft |
+| `42P*`, `45P*` | 40 ft flat rack |
+| `42U*`, `45U*` | 40 ft open top |
 | `45G*`, `45B*`, `45V*`, `4500`, `4510` | `HC40` |
 
-## Responsabilidade com Dados
+## Data Responsibility
 
-A seguranca dos dados e uma responsabilidade compartilhada. Em qualquer arquitetura operacional, todos temos o dever de proteger informacoes sensiveis, preservar a confidencialidade das fontes e usar dados apenas de forma adequada, consciente e controlada.
+Public examples are sanitized. Operational intelligence must protect sensitive data, preserve confidentiality, and expose only the logic needed to demonstrate the architecture.
